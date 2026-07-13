@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}}</title>
+<style>
+/* === Reset & Base === */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:Inter,'Helvetica Neue',Arial,'Noto Sans SC','PingFang SC',sans-serif;background:#F6F6F6;color:#111;line-height:1.5}
+
+/* === Fonts === */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
+
+/* === Layout === */
+.deck{display:flex;height:100vh;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.slide{min-width:100vw;height:100vh;padding:32px;display:flex;flex-direction:column;position:relative;overflow:hidden}
+
+/* === Typography === */
+.font-mono{font-family:'JetBrains Mono',monospace}
+
+h1{font-size:72px;font-weight:800;line-height:1;text-transform:uppercase;letter-spacing:-.03em}
+h2{font-size:48px;font-weight:600;line-height:1.1;letter-spacing:-.02em}
+h3{font-size:24px;font-weight:600;line-height:1.3}
+.body{font-size:16px;line-height:1.6}
+.label{font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.08em;opacity:.5}
+
+/* === Spacing (8px grid) === */
+.mb-8{margin-bottom:8px}
+.mb-16{margin-bottom:16px}
+.mb-24{margin-bottom:24px}
+.mb-32{margin-bottom:32px}
+.mb-40{margin-bottom:40px}
+.mb-48{margin-bottom:48px}
+
+/* === Utilities === */
+.text-center{text-align:center}
+.flex{display:flex}
+.flex-col{flex-direction:column}
+.items-center{align-items:center}
+.justify-center{justify-content:center}
+.grow{flex:1}
+.hairline{border:1px solid #E5E5E5}
+
+/* === Swiss Grid Background === */
+.grid-bg{position:absolute;inset:0;z-index:-1;background-image:linear-gradient(#E5E5E5 1px,transparent 1px),linear-gradient(90deg,#E5E5E5 1px,transparent 1px);background-size:24px 24px;opacity:.5}
+
+/* === Accent Colors === */
+.accent-ikb{color:#002FA7}
+.accent-lemon{color:#FDE047}
+.accent-lime{color:#65A30D}
+.accent-orange{color:#FF5F1F}
+.bg-ikb{background:#002FA7}
+.bg-lemon{background:#FDE047}
+.bg-lime{background:#65A30D}
+.bg-orange{background:#FF5F1F}
+
+/* === Data Grid === */
+.data-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.data-cell{padding:24px 0;border-top:1px solid #E5E5E5}
+.data-number{font-size:56px;font-weight:800;line-height:1;letter-spacing:-.03em}
+.data-label{font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.08em;opacity:.5;margin-top:8px}
+
+/* === Navigation === */
+.nav{position:fixed;bottom:24px;right:32px;display:flex;gap:8px;z-index:100}
+.nav button{width:36px;height:36px;border:1px solid #E5E5E5;background:transparent;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:10px;transition:all .2s}
+.nav button:hover{background:#111;color:#F6F6F6}
+
+/* === Responsive === */
+@media(max-width:768px){
+  .slide{padding:20px}
+  h1{font-size:36px}
+  h2{font-size:28px}
+  .data-grid{grid-template-columns:repeat(2,1fr)}
+  .data-number{font-size:40px}
+}
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+<!-- Slide 1: Hero -->
+<div class="slide flex" style="align-items:flex-end">
+  <div class="grid-bg"></div>
+  <div style="flex:6">
+    <div class="label mb-24">{{LABEL}}</div>
+    <h1 class="mb-16">{{HERO_TITLE}}</h1>
+    <p class="body" style="max-width:480px">{{HERO_SUBTITLE}}</p>
+  </div>
+  <div style="flex:4" class="flex flex-col justify-center">
+    <div class="font-mono" style="font-size:14px;opacity:.6">{{META_DATE}}</div>
+    <div class="font-mono" style="font-size:14px;opacity:.6;margin-top:8px">{{META_AUTHOR}}</div>
+  </div>
+</div>
+
+<!-- Slide 2: Chapter -->
+<div class="slide flex flex-col justify-end" style="border-top:1px solid #E5E5E5;border-bottom:1px solid #E5E5E5">
+  <div class="font-mono" style="font-size:160px;font-weight:800;opacity:.06;position:absolute;top:32px;left:32px;line-height:1">{{CHAPTER_NUM}}</div>
+  <h2>{{CHAPTER_TITLE}}</h2>
+  <p class="body" style="max-width:600px;margin-top:16px;opacity:.7">{{CHAPTER_DESC}}</p>
+</div>
+
+<!-- Slide 3: Content -->
+<div class="slide">
+  <div class="flex" style="gap:48px;height:100%">
+    <div style="flex:1">
+      <h3 class="mb-32">{{CONTENT_TITLE}}</h3>
+      <div class="body">{{CONTENT_BODY}}</div>
+    </div>
+    <div style="flex:1;border-left:1px solid #E5E5E5;padding-left:48px" class="flex flex-col justify-center">
+      <div class="font-mono label mb-16">KEY POINTS</div>
+      <ul style="list-style:none">
+        <li style="padding:12px 0;border-bottom:1px solid #E5E5E5">{{POINT_1}}</li>
+        <li style="padding:12px 0;border-bottom:1px solid #E5E5E5">{{POINT_2}}</li>
+        <li style="padding:12px 0;border-bottom:1px solid #E5E5E5">{{POINT_3}}</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 4: Data Grid -->
+<div class="slide flex flex-col justify-center">
+  <div class="label mb-32">{{DATA_TITLE}}</div>
+  <div class="data-grid">
+    <div class="data-cell">
+      <div class="data-number accent-ikb">{{NUM_1}}<span style="font-size:24px;font-weight:400;margin-left:4px">{{UNIT_1}}</span></div>
+      <div class="data-label">{{LABEL_1}}</div>
+    </div>
+    <div class="data-cell">
+      <div class="data-number accent-ikb">{{NUM_2}}<span style="font-size:24px;font-weight:400;margin-left:4px">{{UNIT_2}}</span></div>
+      <div class="data-label">{{LABEL_2}}</div>
+    </div>
+    <div class="data-cell">
+      <div class="data-number accent-ikb">{{NUM_3}}<span style="font-size:24px;font-weight:400;margin-left:4px">{{UNIT_3}}</span></div>
+      <div class="data-label">{{LABEL_3}}</div>
+    </div>
+    <div class="data-cell">
+      <div class="data-number accent-ikb">{{NUM_4}}<span style="font-size:24px;font-weight:400;margin-left:4px">{{UNIT_4}}</span></div>
+      <div class="data-label">{{LABEL_4}}</div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 5: Closing -->
+<div class="slide flex flex-col justify-center" style="border-top:1px solid #E5E5E5">
+  <div style="max-width:600px">
+    <h2 class="mb-16">{{CLOSING_TITLE}}</h2>
+    <p class="body mb-32" style="opacity:.7">{{CLOSING_DESC}}</p>
+    <div class="font-mono" style="font-size:14px"><a href="mailto:{{EMAIL}}" style="color:#002FA7;text-decoration:none">{{EMAIL}}</a></div>
+    <div class="font-mono" style="font-size:14px;margin-top:8px;opacity:.5">{{URL}}</div>
+  </div>
+</div>
+
+</div>
+
+<div class="nav">
+  <button onclick="prev()">←</button>
+  <button onclick="next()">→</button>
+</div>
+
+<script>
+const deck=document.getElementById('deck');
+let current=0;
+const slides=deck.children.length;
+
+function update(){deck.style.transform=`translateX(-${current*100}vw)`}
+function next(){if(current<slides-1){current++;update()}}
+function prev(){if(current>0){current--;update()}}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')next();
+  if(e.key==='ArrowLeft')prev();
+});
+
+let startX=0;
+document.addEventListener('touchstart',e=>startX=e.touches[0].clientX);
+document.addEventListener('touchend',e=>{
+  const diff=startX-e.changedTouches[0].clientX;
+  if(Math.abs(diff)>50)diff>0?next():prev();
+});
+</script>
+
+</body>
+</html>

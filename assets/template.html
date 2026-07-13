@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}}</title>
+<style>
+/* === Reset & Base === */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Noto Sans SC','Segoe UI',sans-serif;background:#F4F1EA;color:#1A1A1A;line-height:1.6}
+
+/* === Fonts === */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+/* === Layout === */
+.deck{display:flex;height:100vh;transition:transform .6s cubic-bezier(.25,.1,.25,1)}
+.slide{min-width:100vw;height:100vh;padding:48px;display:flex;flex-direction:column;position:relative;overflow:hidden}
+
+/* === Typography === */
+.font-serif{font-family:'Noto Serif SC',Georgia,serif}
+.font-mono{font-family:'DM Mono',monospace}
+
+h1{font-size:64px;font-weight:700;line-height:1.1;letter-spacing:-.02em}
+h2{font-size:48px;font-weight:600;line-height:1.2}
+h3{font-size:24px;font-weight:600;line-height:1.4}
+.body{font-size:18px;line-height:1.7}
+.label{font-family:'DM Mono',monospace;font-size:14px;text-transform:uppercase;letter-spacing:.05em;opacity:.5}
+.caption{font-size:14px;opacity:.6}
+
+/* === Spacing === */
+.mb-8{margin-bottom:8px}
+.mb-16{margin-bottom:16px}
+.mb-24{margin-bottom:24px}
+.mb-32{margin-bottom:32px}
+.mb-48{margin-bottom:48px}
+
+/* === Utilities === */
+.text-center{text-align:center}
+.flex{display:flex}
+.flex-col{flex-direction:column}
+.items-center{align-items:center}
+.justify-center{justify-content:center}
+.grow{flex:1}
+.hairline{border:1px solid rgba(26,26,26,.12)}
+.radius-2{border-radius:2px}
+
+/* === Background === */
+.bg-full{position:absolute;inset:0;z-index:-1;object-fit:cover}
+.bg-overlay{position:absolute;inset:0;z-index:-1;background:linear-gradient(to bottom,rgba(244,241,234,.7),rgba(244,241,234,.9))}
+
+/* === Navigation === */
+.nav{position:fixed;bottom:24px;right:32px;display:flex;gap:12px;z-index:100}
+.nav button{width:40px;height:40px;border:1px solid rgba(26,26,26,.2);background:transparent;cursor:pointer;border-radius:2px;font-family:'DM Mono',monospace;font-size:12px;transition:all .2s}
+.nav button:hover{background:#1A1A1A;color:#F4F1EA}
+
+/* === Responsive === */
+@media(max-width:1024px){
+  .slide{padding:24px}
+  h1{font-size:32px}
+  h2{font-size:24px}
+  .body{font-size:16px}
+}
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+<!-- Slide 1: Hero -->
+<div class="slide flex flex-col justify-center">
+  <img src="{{HERO_BG}}" class="bg-full" alt="">
+  <div class="bg-overlay"></div>
+  <div class="label mb-24">{{LABEL}}</div>
+  <h1 class="font-serif mb-16">{{HERO_TITLE}}</h1>
+  <p class="body">{{HERO_SUBTITLE}}</p>
+</div>
+
+<!-- Slide 2: Chapter -->
+<div class="slide flex flex-col justify-center items-center text-center">
+  <div class="font-serif" style="font-size:200px;opacity:.08;position:absolute">{{CHAPTER_NUM}}</div>
+  <h2 class="font-serif">{{CHAPTER_TITLE}}</h2>
+  <p class="caption mt-16">{{CHAPTER_DESC}}</p>
+</div>
+
+<!-- Slide 3: Content -->
+<div class="slide">
+  <h3 class="mb-24">{{CONTENT_TITLE}}</h3>
+  <div class="body">{{CONTENT_BODY}}</div>
+</div>
+
+<!-- Slide 4: Data -->
+<div class="slide">
+  <h3 class="mb-32">{{DATA_TITLE}}</h3>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:24px">
+    <div class="hairline radius-2 p-24">
+      <div class="font-serif" style="font-size:56px;font-weight:700">{{NUM_1}}</div>
+      <div class="label mt-8">{{LABEL_1}}</div>
+    </div>
+    <div class="hairline radius-2 p-24">
+      <div class="font-serif" style="font-size:56px;font-weight:700">{{NUM_2}}</div>
+      <div class="label mt-8">{{LABEL_2}}</div>
+    </div>
+    <div class="hairline radius-2 p-24">
+      <div class="font-serif" style="font-size:56px;font-weight:700">{{NUM_3}}</div>
+      <div class="label mt-8">{{LABEL_3}}</div>
+    </div>
+    <div class="hairline radius-2 p-24">
+      <div class="font-serif" style="font-size:56px;font-weight:700">{{NUM_4}}</div>
+      <div class="label mt-8">{{LABEL_4}}</div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 5: Closing -->
+<div class="slide flex flex-col justify-center items-center text-center">
+  <img src="{{HERO_BG}}" class="bg-full" alt="">
+  <div class="bg-overlay"></div>
+  <h2 class="font-serif mb-16">{{CLOSING_TITLE}}</h2>
+  <p class="body mb-32">{{CLOSING_DESC}}</p>
+  <div class="label">{{CONTACT}}</div>
+</div>
+
+</div>
+
+<div class="nav">
+  <button onclick="prev()">←</button>
+  <button onclick="next()">→</button>
+</div>
+
+<script>
+const deck=document.getElementById('deck');
+let current=0;
+const slides=deck.children.length;
+
+function update(){deck.style.transform=`translateX(-${current*100}vw)`}
+function next(){if(current<slides-1){current++;update()}}
+function prev(){if(current>0){current--;update()}}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')next();
+  if(e.key==='ArrowLeft')prev();
+});
+
+let startX=0;
+document.addEventListener('touchstart',e=>startX=e.touches[0].clientX);
+document.addEventListener('touchend',e=>{
+  const diff=startX-e.changedTouches[0].clientX;
+  if(Math.abs(diff)>50)diff>0?next():prev();
+});
+</script>
+
+</body>
+</html>
